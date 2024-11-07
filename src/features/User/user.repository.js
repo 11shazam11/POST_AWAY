@@ -50,7 +50,7 @@ export class UserRepo{
             if (passwordMatch) {
 
                 //create jwt token
-                const token = jwt.sign({userId:user._id},process.env.JWTSecretKey,{expiresIn:"1h"});
+                const token = jwt.sign({userId:user._id},"dp8LkdD5qCMQ6KswQbchL5hagMo0jsJP",{expiresIn:"1h"});
                 await user.tokens.push(token);
                 await user.save();
                 return { success: true, message: "Login successful", user: token };
