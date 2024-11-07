@@ -12,5 +12,9 @@
     "swagger-ui-express": "^5.0.1",
     "winston": "^3.16.0"
   },
-  "type": "module"
+  "type": "module",
+  "engines": {
+  "node": "18.x"
+}
+
 }
