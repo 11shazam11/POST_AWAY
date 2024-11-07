@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
+import assert from "assert";
 //For api documenataion 
 import swagger from "swagger-ui-express";
 //api docs json file (swagger)
