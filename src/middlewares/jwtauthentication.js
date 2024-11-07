@@ -19,7 +19,7 @@ const jwtAuth = async (req,res,next)=>{
         }
         //3.If present Validate and see
 
-        const payload = jwt.verify(token,process.env.JWTSecretKey);
+        const payload = jwt.verify(token,"dp8LkdD5qCMQ6KswQbchL5hagMo0jsJP");
         //Extract the payload
         req.userId = payload.userId;
         next();
