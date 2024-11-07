@@ -1,0 +1,763 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "POST-AWAY",
+      "description": "API for a post management system"
+    },
+    "host": "localhost:3000",
+    "securityDefinitions": {
+      "JWT": {
+        "in": "header",
+        "name": "Authorization",
+        "type": "apiKey"
+      }
+    },
+    "paths": {
+      "/api/user/signup": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "Register User",
+          "description": "API for registering a new user",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "User credentials",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string", "example": "Abhay" },
+                  "email": { "type": "string", "example": "abhay@gmail.com" },
+                  "password": { "type": "string", "example": "sabfoalan" },
+                  "age": { "type": "number", "example": 25 },
+                  "gender": {
+                    "type": "string",
+                    "enum": ["Male", "Female", "Others"],
+                    "example": "Male"
+                  }
+                },
+                "required": ["name", "email", "password", "age", "gender"]
+              }
+            }
+          ],
+          "responses": {
+            "200": { "description": "User registered successfully" },
+            "400": { "description": "Invalid input data" },
+            "500": { "description": "Internal server error" }
+          }
+        }
+      },
+      "/api/user/signin": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "Login User",
+          "description": "API for user login",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "User credentials",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string", "example": "abhay@gmail.com" },
+                  "password": { "type": "string", "example": "sabfoalan" }
+                },
+                "required": ["email", "password"]
+              }
+            }
+          ],
+          "responses": {
+            "200": { "description": "Login successful" },
+            "400": { "description": "Invalid credentials" },
+            "404": { "description": "User not found" },
+            "500": { "description": "Internal server error" }
+          }
+        }
+      },
+      "/api/user/logout": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "Logout User",
+          "description": "API to log out a user",
+          "security": [{ "JWT": [] }],
+          "responses": {
+            "200": { "description": "Logout successfully" },
+            "404": { "description": "User not found" },
+            "500": { "description": "Internal server error" }
+          }
+        }
+      },
+      "/api/user/logout-all-devices": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "Logout from All Devices",
+          "description": "API to log out a user from all devices",
+          "security": [{ "JWT": [] }],
+          "responses": {
+            "200": { "description": "Logged out from all devices successfully" },
+            "404": { "description": "User not found" },
+            "500": { "description": "Internal server error" }
+          }
+        }
+      },
+      "/api/user/get-details/{userId}": {
+        "get": {
+          "tags": ["Users"],
+          "summary": "Get User Details",
+          "description": "Retrieve details of a specific user by ID",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "userId",
+              "type": "string",
+              "required": true,
+              "description": "The ID of the user to retrieve"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User details retrieved successfully"
+            },
+            "404": {
+              "description": "User not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/api/user/get-all-details": {
+        "get": {
+          "tags": ["Users"],
+          "summary": "Get All User Details",
+          "description": "Retrieve details of all users",
+          "responses": {
+            "200": {
+              "description": "All user details retrieved successfully"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/api/user/update-details/{userId}": {
+        "put": {
+          "tags": ["Users"],
+          "summary": "Update User Details",
+          "description": "Update details of a specific user by ID",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "userId",
+              "type": "string",
+              "required": true,
+              "description": "The ID of the user to update"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "description": "The data to update the user with",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The updated name of the user"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "The updated email of the user"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The updated password of the user"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User updated successfully"
+            },
+            "404": {
+              "description": "User not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/api/user/resetPassword/otp": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "Send OTP",
+          "description": "API to send OTP for password reset",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "User email",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string", "example": "abhay@gmail.com" }
+                },
+                "required": ["email"]
+              }
+            }
+          ],
+          "responses": {
+            "200": { "description": "OTP sent successfully" },
+            "404": { "description": "User not found" },
+            "500": { "description": "Internal server error" }
+          }
+        }
+      },
+      "/api/user/resetPassword/verify": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "Verify OTP",
+          "description": "API to verify the OTP for password reset",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "OTP for verification",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "otp": { "type": "string", "example": "123456" }
+                },
+                "required": ["otp"]
+              }
+            }
+          ],
+          "responses": {
+            "200": { "description": "OTP verified, please set a new password" },
+            "404": { "description": "Invalid OTP" },
+            "500": { "description": "Internal server error" }
+          }
+        }
+      },
+      "/api/user/resetPassword/setPassword": {
+        "post": {
+          "tags": ["Users"],
+          "summary": "Set New Password",
+          "description": "API to set a new password",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "New password details",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "newPassword": { "type": "string", "example": "newpassword123" }
+                },
+                "required": ["newPassword"]
+              }
+            }
+          ],
+          "responses": {
+            "200": { "description": "Password reset successful" },
+            "400": { "description": "OTP not verified" },
+            "500": { "description": "Internal server error" }
+          }
+        }
+      },
+      "/api/post/": {
+    "post": {
+      "tags": ["Posts"],
+      "summary": "Add a new post",
+      "description": "API for adding a new post with an image upload",
+      "security": [
+                    { "JWT": {} }
+                ],
+      "consumes": ["multipart/form-data"],
+      "parameters": [
+        {
+          "in": "formData",
+          "name": "image",
+          "type": "file",
+          "description": "The image file to upload",
+          "required": true
+        },
+        {
+          "in": "formData",
+          "name": "caption",
+          "type": "string",
+          "description": "Caption for the post",
+          "required": true
+        }
+      ],
+      "responses": {
+        "200": { "description": "Post created successfully" },
+        "404": { "description": "Please upload a file" },
+        "500": { "description": "Internal server error" }
+      }
+    },
+    "get": {
+      "tags": ["Posts"],
+      "summary": "Get User Posts",
+      "description": "Retrieve all posts created by the authenticated user",
+      "security": [
+        { "JWT": {} }
+      ],
+      "responses": {
+        "200": {
+          "description": "User posts retrieved successfully"
+        },
+        "500": {
+          "description": "Internal server error"
+        }
+      }
+    }
+  },
+  "/api/post/{postId}": {
+    "put": {
+      "tags": ["Posts"],
+      "summary": "Update a post",
+      "description": "API for updating a post by ID with a new image upload",
+      "security": [
+                    { "JWT": {} }
+                ],
+      "consumes": ["multipart/form-data"],
+      "parameters": [
+        {
+          "in": "path",
+          "name": "postId",
+          "type": "string",
+          "description": "ID of the post to update",
+          "required": true
+        },
+        {
+          "in": "formData",
+          "name": "image",
+          "type": "file",
+          "description": "The new image file to upload"
+        },
+        {
+          "in": "formData",
+          "name": "caption",
+          "type": "string",
+          "description": "Updated caption for the post"
+        }
+      ],
+      "responses": {
+        "200": { "description": "Post updated successfully" },
+        "403": { "description": "Only post owner can update" },
+        "404": { "description": "Post not found" },
+        "500": { "description": "Internal server error" }
+      }
+    },
+    "delete": {
+      "tags": ["Posts"],
+      "summary": "Delete a post",
+      "description": "API for deleting a post by ID",
+      "security": [
+                    { "JWT": {} }
+                ],
+      "parameters": [
+        {
+          "in": "path",
+          "name": "postId",
+          "type": "string",
+          "description": "ID of the post to delete",
+          "required": true
+        }
+      ],
+      "responses": {
+        "200": { "description": "Post deleted successfully" },
+        "403": { "description": "Post not yours to delete" },
+        "404": { "description": "Post does not exist" },
+        "500": { "description": "Internal server error" }
+      }
+    },
+    "get": {
+      "tags": ["Posts"],
+      "summary": "Get One Post",
+      "description": "Retrieve a specific post by ID",
+      "parameters": [
+        {
+          "in": "path",
+          "name": "postId",
+          "type": "string",
+          "required": true,
+          "description": "The ID of the post to retrieve"
+        }
+      ],
+      "security": [
+        { "JWT": {} }
+      ],
+      "responses": {
+        "200": {
+          "description": "Post retrieved successfully"
+        },
+        "404": {
+          "description": "Post not found"
+        },
+        "500": {
+          "description": "Internal server error"
+        }
+      }
+    }
+  },
+  "/api/post/all": {
+    "get": {
+      "tags": ["Posts"],
+      "summary": "Get All Posts",
+      "description": "Retrieve all posts",
+      "security": [
+        { "JWT": {} }
+      ],
+      "responses": {
+        "200": {
+          "description": "All posts retrieved successfully"
+        },
+        "500": {
+          "description": "Internal server error"
+        }
+      }
+    }
+  },
+  "/api/post/likesComments/{postId}": {
+    "get": {
+      "tags": ["Posts"],
+      "summary": "Get likes and comments count",
+      "description": "API to get the number of likes and comments for a specific post",
+      "security": [
+                    { "JWT": {} }
+                ],
+      "parameters": [
+        {
+          "in": "path",
+          "name": "postId",
+          "type": "string",
+          "description": "ID of the post to fetch likes and comments for",
+          "required": true
+        }
+      ],
+      "responses": {
+        "200": { "description": "Likes and comments displayed successfully" },
+        "404": { "description": "Post does not exist" },
+        "500": { "description": "Internal server error" }
+      }
+    }
+  },
+  "/api/comment/{postId}": {
+    "get": {
+      "tags": ["Comments"],
+      "summary": "Get Comments for a Post",
+      "description": "Retrieve all comments for a specific post",
+      "parameters": [
+        {
+          "in": "path",
+          "name": "postId",
+          "type": "string",
+          "required": true,
+          "description": "The ID of the post to get comments for"
+        }
+      ],
+      "security": [
+        { "JWT": {} }
+      ],
+      "responses": {
+        "200": {
+          "description": "Comments retrieved successfully"
+        },
+        "404": {
+          "description": "Comments not found"
+        },
+        "500": {
+          "description": "Internal server error"
+        }
+      }
+    },
+    "post": {
+      "tags": ["Comments"],
+      "summary": "Add a comment to a post",
+      "description": "API for adding a new comment to a post",
+      "security": [
+                    { "JWT": {} }
+                ],
+      "parameters": [
+        {
+          "in": "path",
+          "name": "postId",
+          "type": "string",
+          "description": "ID of the post to add the comment to",
+          "required": true
+        },
+        {
+          "in": "body",
+          "name": "comment",
+          "description": "Comment text to be added",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "comment": { "type": "string" }
+            }
+          }
+        }
+      ],
+      "responses": {
+        "200": { "description": "Comment added successfully" },
+        "500": { "description": "Internal server error" }
+      }
+    }
+  },
+  "/api/comment/{commentId}": {
+    "put": {
+      "tags": ["Comments"],
+      "summary": "Update a comment",
+      "description": "API for updating an existing comment",
+      "security": [
+                    { "JWT": {} }
+                ],
+      "parameters": [
+        {
+          "in": "path",
+          "name": "commentId",
+          "type": "string",
+          "description": "ID of the comment to update",
+          "required": true
+        },
+        {
+          "in": "body",
+          "name": "comment",
+          "description": "Updated comment text",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "comment": { "type": "string" }
+            }
+          }
+        }
+      ],
+      "responses": {
+        "200": { "description": "Comment updated successfully" },
+        "403": { "description": "Cannot update other's comment" },
+        "404": { "description": "Comment not found" },
+        "500": { "description": "Internal server error" }
+      }
+    },
+    "delete": {
+      "tags": ["Comments"],
+      "summary": "Delete a comment",
+      "description": "API for deleting a comment",
+      "security": [
+                    { "JWT": {} }
+                ],
+      "parameters": [
+        {
+          "in": "path",
+          "name": "commentId",
+          "type": "string",
+          "description": "ID of the comment to delete",
+          "required": true
+        }
+      ],
+      "responses": {
+        "200": { "description": "Comment deleted successfully" },
+        "403": { "description": "Cannot delete other's comment" },
+        "404": { "description": "Comment not found" },
+        "500": { "description": "Internal server error" }
+      }
+    }
+  },
+  "/api/like/{postId}": {
+    "post": {
+      "tags": ["Likes"],
+      "summary": "Add a like to a post",
+      "description": "API for adding a like to a post",
+      "parameters": [
+        {
+          "in": "path",
+          "name": "postId",
+          "type": "string",
+          "required": true,
+          "description": "ID of the post to like"
+        }
+      ],
+    "security": [
+                    { "JWT": {} }
+                ],
+      "responses": {
+        "200": {
+          "description": "Post liked successfully"
+        },
+        "401": {
+          "description": "Unauthorized - Invalid or missing token"
+        },
+        "404": {
+          "description": "Post not found"
+        },
+        "500": {
+          "description": "Internal server error"
+        }
+      }
+    }
+  },
+  "/api/friend/get-friends/{userId}": {
+    "get": {
+      "tags": ["Friends"],
+      "summary": "Get User Friends",
+      "description": "Retrieve the friends of a specific user",
+      "parameters": [
+        {
+          "in": "path",
+          "name": "userId",
+          "type": "string",
+          "required": true,
+          "description": "The ID of the user to get friends for"
+        }
+      ],
+      "security": [
+        { "JWT": {} }
+      ],
+      "responses": {
+        "200": {
+          "description": "Friends retrieved successfully"
+        },
+        "404": {
+          "description": "User not found"
+        },
+        "500": {
+          "description": "Internal server error"
+        }
+      }
+    }
+  },
+  "/api/friend/toggle-friendship/{friendId}": {
+    "post": {
+      "tags": ["Friends"],
+      "summary": "Send or cancel a friend request",
+      "description": "API to send a new friend request or cancel an existing one.",
+      "parameters": [
+        {
+          "in": "path",
+          "name": "friendId",
+          "type": "string",
+          "required": true,
+          "description": "ID of the friend to send or cancel a request to"
+        }
+      ],
+      "security": [
+                    { "JWT": {} }
+                ],
+      "responses": {
+        "200": {
+          "description": "Friend request sent or removed successfully"
+        },
+        "401": {
+          "description": "Unauthorized - Invalid or missing token"
+        },
+        "404": {
+          "description": "Request not found"
+        },
+        "500": {
+          "description": "Internal server error"
+        }
+      }
+    }
+  },
+  "/api/friend/response-to-request/{friendId}": {
+  "post": {
+    "tags": ["Friends"],
+    "summary": "Accept or reject a friend request",
+    "description": "API to accept or reject a received friend request.",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "friendId",
+        "type": "string",
+        "required": true,
+        "description": "ID of the friend request"
+      },
+      {
+        "in": "query",
+        "name": "action",
+        "type": "string",
+        "required": true,
+        "enum": ["accept", "reject"],
+        "description": "Action to perform on the friend request"
+      }
+    ],
+    "security": [
+      { "JWT": {} }
+    ],
+    "responses": {
+      "200": {
+        "description": "Friend request handled successfully"
+      },
+      "401": {
+        "description": "Unauthorized - Invalid or missing token"
+      },
+      "404": {
+        "description": "Request not found"
+      },
+      "500": {
+        "description": "Internal server error"
+      }
+    }
+  }
+},
+  "/api/friend/get-pending-request": {
+    "get": {
+      "tags": ["Friends"],
+      "summary": "Get received friend requests",
+      "description": "API to retrieve all received friend requests for the user.",
+      "security": [
+                    { "JWT": {} }
+                ],
+      "responses": {
+        "200": {
+          "description": "List of received friend requests"
+        },
+        "401": {
+          "description": "Unauthorized - Invalid or missing token"
+        },
+        "500": {
+          "description": "Internal server error"
+        }
+      }
+    }
+  },
+  "/api/friend/sent": {
+    "get": {
+      "tags": ["Friends"],
+      "summary": "Get sent friend requests",
+      "description": "API to retrieve all sent friend requests made by the user.",
+      "security": [
+                    { "JWT": {} }
+                ],
+      "responses": {
+        "200": {
+          "description": "List of sent friend requests"
+        },
+        "401": {
+          "description": "Unauthorized - Invalid or missing token"
+        },
+        "500": {
+          "description": "Internal server error"
+        }
+      }
+    }
+}
+    }
+  }
+  
